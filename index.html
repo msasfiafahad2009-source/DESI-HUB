@@ -436,7 +436,7 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
+  <!-- Task 3: Contact Section with Smart Form Validation -->
   <section id="contact" class="section-padding">
     <div class="container">
       <div class="contact-wrapper">
@@ -471,19 +471,31 @@
         </div>
 
         <div class="card contact-form-card">
-          <form id="contact-form">
+          <!-- Form-level Status Banner -->
+          <div id="form-status-banner" class="status-banner" aria-live="polite"></div>
+
+          <form id="contact-form" novalidate>
             <div class="form-group">
               <label for="c-name">Full Name</label>
-              <input type="text" id="c-name" class="form-input" placeholder="e.g. Ali Raza" required />
+              <input type="text" id="c-name" class="form-input" placeholder="e.g. Ali Raza" />
+              <span id="name-error" class="field-error"></span>
             </div>
+
             <div class="form-group">
               <label for="c-email">Email Address</label>
-              <input type="email" id="c-email" class="form-input" placeholder="e.g. ali@example.com" required />
+              <input type="email" id="c-email" class="form-input" placeholder="e.g. ali@example.com" />
+              <span id="email-error" class="field-error"></span>
             </div>
+
             <div class="form-group">
-              <label for="c-message">Your Message</label>
-              <textarea id="c-message" class="form-input" rows="4" placeholder="How can we help you?" required></textarea>
+              <div class="label-row">
+                <label for="c-message">Your Message</label>
+                <span id="char-counter" class="char-counter">0 / 200</span>
+              </div>
+              <textarea id="c-message" class="form-input" rows="4" maxlength="200" placeholder="How can we help you? (10+ characters)"></textarea>
+              <span id="message-error" class="field-error"></span>
             </div>
+
             <button type="submit" class="btn btn-gold btn-block">
               <i class="fa-solid fa-paper-plane"></i> Send Message
             </button>

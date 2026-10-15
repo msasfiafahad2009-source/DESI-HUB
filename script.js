@@ -1,13 +1,14 @@
 /* ==========================================================================
    DESI HUB — Complete Application Script
    Features: Task 2 Mobile Toggle (classList.toggle('open')), Dark Mode Toggle
-   (classList.toggle('dark')), Shopping Cart, 5% Discount Rule & Recipe Viewer
+   (classList.toggle('dark')), Task 3 Smart Form Validation & Character Counter,
+   Shopping Cart with 5% Discount Rule & Recipe Modal Viewer
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // ----------------------------------------------------
-  // FEATURE A: Mobile Menu Toggle
+  // TASK 2 — FEATURE A: Mobile Menu Toggle
   // ----------------------------------------------------
   const menuToggleBtn = document.getElementById('menu-toggle-btn');
   const mainNav = document.getElementById('main-nav');
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ----------------------------------------------------
-  // FEATURE B: Dark Mode Toggle
+  // TASK 2 — FEATURE B: Dark Mode Toggle
   // ----------------------------------------------------
   const themeToggleBtn = document.getElementById('theme-toggle');
   const themeBtnText = document.getElementById('theme-btn-text');
@@ -48,6 +49,127 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.log('Theme changed. Dark mode active:', isDark);
     });
+  }
+
+  // ----------------------------------------------------
+  // TASK 3: SMART CONTACT FORM VALIDATION & LIVE COUNTER
+  // ----------------------------------------------------
+  const contactForm = document.getElementById('contact-form');
+  const nameInput = document.getElementById('c-name');
+  const emailInput = document.getElementById('c-email');
+  const messageInput = document.getElementById('c-message');
+
+  const nameError = document.getElementById('name-error');
+  const emailError = document.getElementById('email-error');
+  const messageError = document.getElementById('message-error');
+  
+  const charCounter = document.getElementById('char-counter');
+  const formStatusBanner = document.getElementById('form-status-banner');
+
+  const MAX_CHAR_LIMIT = 200;
+
+  // Live Character Counter
+  if (messageInput && charCounter) {
+    messageInput.addEventListener('input', () => {
+      const currentLength = messageInput.value.length;
+      
+      // Safety Rule: Use textContent strictly
+      charCounter.textContent = `${currentLength} / ${MAX_CHAR_LIMIT}`;
+
+      if (currentLength >= MAX_CHAR_LIMIT) {
+        charCounter.classList.add('limit-reached');
+      } else {
+        charCounter.classList.remove('limit-reached');
+      }
+    });
+  }
+
+  // Submit Event & Validation Checks
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearFormErrors();
+
+      let isValid = true;
+
+      // Rule 1: Name validation (At least 3 characters after .trim())
+      const trimmedName = nameInput ? nameInput.value.trim() : '';
+      if (trimmedName.length < 3) {
+        showFieldError(nameInput, nameError, "Please enter your full name.");
+        isValid = false;
+      } else {
+        showFieldSuccess(nameInput);
+      }
+
+      // Rule 2: Email validation (Contains '@' and '.')
+      const emailValue = emailInput ? emailInput.value.trim() : '';
+      if (!emailValue.includes('@') || !emailValue.includes('.')) {
+        showFieldError(emailInput, emailError, "Please enter a valid email.");
+        isValid = false;
+      } else {
+        showFieldSuccess(emailInput);
+      }
+
+      // Rule 3: Message validation (At least 10 characters)
+      const messageValue = messageInput ? messageInput.value.trim() : '';
+      if (messageValue.length < 10) {
+        showFieldError(messageInput, messageError, "Tell us a little more (10+ characters).");
+        isValid = false;
+      } else {
+        showFieldSuccess(messageInput);
+      }
+
+      // Decision logic
+      if (isValid) {
+        // Safety Rule: Use textContent exclusively to render visitor name without XSS execution
+        if (formStatusBanner) {
+          formStatusBanner.className = 'status-banner success';
+          formStatusBanner.textContent = `Thank you, ${trimmedName}! Your message has been received.`;
+        }
+
+        contactForm.reset();
+        if (charCounter) charCounter.textContent = `0 / ${MAX_CHAR_LIMIT}`;
+        setTimeout(clearFormErrors, 5000);
+      } else {
+        if (formStatusBanner) {
+          formStatusBanner.className = 'status-banner error';
+          formStatusBanner.textContent = 'Please fix the errors below before sending.';
+        }
+      }
+    });
+  }
+
+  function showFieldError(inputEl, errorEl, messageText) {
+    if (inputEl) {
+      inputEl.classList.add('input-error');
+      inputEl.classList.remove('input-success');
+    }
+    if (errorEl) {
+      // Use textContent strictly
+      errorEl.textContent = messageText;
+    }
+  }
+
+  function showFieldSuccess(inputEl) {
+    if (inputEl) {
+      inputEl.classList.remove('input-error');
+      inputEl.classList.add('input-success');
+    }
+  }
+
+  function clearFormErrors() {
+    [nameInput, emailInput, messageInput].forEach(input => {
+      if (input) input.classList.remove('input-error', 'input-success');
+    });
+
+    [nameError, emailError, messageError].forEach(errorEl => {
+      if (errorEl) errorEl.textContent = '';
+    });
+
+    if (formStatusBanner) {
+      formStatusBanner.className = 'status-banner';
+      formStatusBanner.textContent = '';
+    }
   }
 
   // ----------------------------------------------------
@@ -129,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Safe DOM Queries
   const cartDrawer = document.getElementById('cart-drawer');
   const cartOverlay = document.getElementById('cart-overlay');
   const cartOpenBtn = document.getElementById('cart-open-btn');
@@ -145,9 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const recipeModal = document.getElementById('recipe-modal');
   const recipeModalClose = document.getElementById('recipe-modal-close');
   const recipeModalContent = document.getElementById('recipe-modal-content');
-  const contactForm = document.getElementById('contact-form');
 
-  // Drawer Controls
   const toggleCart = (open) => {
     if (!cartDrawer || !cartOverlay) return;
     if (open) {
@@ -165,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (cartCloseBtn) cartCloseBtn.addEventListener('click', () => toggleCart(false));
   if (cartOverlay) cartOverlay.addEventListener('click', () => toggleCart(false));
 
-  // Add To Cart
   document.querySelectorAll('.add-to-cart-btn').forEach(button => {
     button.addEventListener('click', (e) => {
       const btn = e.currentTarget;
@@ -189,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartUI();
   }
 
-  // Event Delegation for Cart Actions
   if (cartItemsContainer) {
     cartItemsContainer.addEventListener('click', (e) => {
       const target = e.target;
@@ -217,7 +334,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Recalculate Totals & 5% Discount
   function updateCartUI() {
     const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
     if (cartBadgeCount) cartBadgeCount.textContent = totalQty;
@@ -248,7 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     
-    // Discount Rule (5% off at Rs. 1,000 subtotal)
     let discount = 0;
     if (subtotal >= 1000) {
       discount = subtotal * 0.05;
@@ -330,21 +445,10 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast("Your cart is empty!");
         return;
       }
-      alert("Thank you for trying DESI HUB! This is a frontend demo checkout.");
+      showToast("Thank you for trying DESI HUB!");
       cart = [];
       updateCartUI();
       toggleCart(false);
-    });
-  }
-
-  // Contact Form
-  if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (!contactForm.checkValidity()) return;
-
-      showToast("Message sent! (Front-end demo submission)");
-      contactForm.reset();
     });
   }
 
