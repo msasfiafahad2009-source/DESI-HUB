@@ -39,7 +39,7 @@
       <!-- Navigation with ID for JS selection -->
       <nav class="nav-links" id="main-nav">
         <a href="#home" class="nav-link active">Home</a>
-        <a href="#shop" class="nav-link">Shop</a>
+        <a href="#shop" class="nav-link">Pantry Explorer</a>
         <a href="#recipes" class="nav-link">Recipes</a>
         <a href="#provinces" class="nav-link">Traditional Foods</a>
         <a href="#about" class="nav-link">About Us</a>
@@ -115,69 +115,55 @@
     </div>
   </section>
 
-  <!-- Shop Section -->
+  <!-- Task 3: Interactive Pantry Explorer Section -->
   <section id="shop" class="section-padding">
     <div class="container">
       <div class="section-header">
         <span class="subheading">KITCHEN ESSENTIALS</span>
-        <h2 class="section-title">Royal Pantry & Spices</h2>
-        <p class="section-desc">Hand-selected, stone-ground spices and organic grains delivered directly to your doorstep.</p>
+        <h2 class="section-title">Royal Pantry Explorer</h2>
+        <p class="section-desc">Search, filter, and sort stone-ground spices and organic grains delivered to your doorstep.</p>
       </div>
 
-      <div class="products-grid">
-        <!-- Product 1 -->
-        <div class="card product-card">
-          <div class="product-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80" alt="Desi Spice Mix" />
-            <span class="product-tag">Best Seller</span>
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">Royal Desi Spice Mix</h3>
-            <p class="product-desc">Stone-ground aromatic blend of cardamom, star anise, and whole spices for rich stews.</p>
-            <div class="product-footer">
-              <span class="product-price">Rs. 350</span>
-              <button class="btn btn-gold btn-sm add-to-cart-btn" data-id="1" data-name="Royal Desi Spice Mix" data-price="350" data-img="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80">
-                <i class="fa-solid fa-plus"></i> Add to Cart
-              </button>
-            </div>
-          </div>
+      <!-- Explorer Controls -->
+      <div class="explorer-controls">
+        <!-- Live Search Input -->
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-input" placeholder="Search spices, grains, cookware..." aria-label="Search Pantry Items" />
         </div>
 
-        <!-- Product 2 -->
-        <div class="card product-card">
-          <div class="product-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80" alt="Premium Basmati Rice" />
-            <span class="product-tag">Aged 2 Years</span>
+        <!-- Filter Buttons & Price Sorting -->
+        <div class="filter-bar">
+          <div class="category-buttons" id="category-buttons">
+            <button class="filter-btn active" data-category="All">All Items</button>
+            <button class="filter-btn" data-category="Whole Spices">Whole Spices</button>
+            <button class="filter-btn" data-category="Ground Spices">Ground Spices</button>
+            <button class="filter-btn" data-category="Grains">Grains</button>
+            <button class="filter-btn" data-category="Cookware">Cookware</button>
+            <button class="filter-btn" data-category="Pantry Essentials">Pantry Essentials</button>
+            <button class="filter-btn" data-category="Luxury Spices">Luxury Spices</button>
           </div>
-          <div class="product-info">
-            <h3 class="product-title">Premium Aged Basmati Rice</h3>
-            <p class="product-desc">Extra-long grain fragrant basmati rice perfect for Biryani and Pulao feasts.</p>
-            <div class="product-footer">
-              <span class="product-price">Rs. 500</span>
-              <button class="btn btn-gold btn-sm add-to-cart-btn" data-id="2" data-name="Premium Aged Basmati Rice" data-price="500" data-img="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80">
-                <i class="fa-solid fa-plus"></i> Add to Cart
-              </button>
-            </div>
-          </div>
+
+          <button id="sort-price-btn" class="sort-btn">
+            <i class="fa-solid fa-arrow-down-short-wide"></i> Sort by Price: Low to High
+          </button>
         </div>
 
-        <!-- Product 3 -->
-        <div class="card product-card">
-          <div class="product-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80" alt="Kitchen Essentials" />
-            <span class="product-tag">Pure & Organic</span>
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">Kitchen Essentials Combo</h3>
-            <p class="product-desc">Pure turmeric powder, red chilli flakes, and organic coriander seeds package.</p>
-            <div class="product-footer">
-              <span class="product-price">Rs. 250</span>
-              <button class="btn btn-gold btn-sm add-to-cart-btn" data-id="3" data-name="Kitchen Essentials Combo" data-price="250" data-img="https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=600&q=80">
-                <i class="fa-solid fa-plus"></i> Add to Cart
-              </button>
-            </div>
-          </div>
+        <!-- Dynamic Items Count Display -->
+        <div class="count-display" id="count-display">
+          Showing 0 of 0 items
         </div>
+      </div>
+
+      <!-- Product Cards Container -->
+      <div id="products-grid" class="products-grid"></div>
+
+      <!-- Friendly Empty State -->
+      <div id="empty-state" class="empty-state hidden">
+        <i class="fa-solid fa-utensils empty-icon"></i>
+        <h3>No Pantry Items Found</h3>
+        <p>We couldn't find anything matching your search query or selected category.</p>
+        <button id="reset-filters-btn" class="btn btn-gold">Reset All Filters</button>
       </div>
     </div>
   </section>
@@ -365,55 +351,6 @@
     </div>
   </section>
 
-  <!-- Reviews Section -->
-  <section class="section-padding">
-    <div class="container">
-      <div class="section-header">
-        <span class="subheading">COMMUNITY REVIEWS</span>
-        <h2 class="section-title">What Home Chefs Say</h2>
-        <p class="section-desc">Sample feedback from passionate food lovers across the country.</p>
-      </div>
-
-      <div class="reviews-grid">
-        <div class="card review-card">
-          <div class="stars">★★★★★</div>
-          <p class="review-text">"The Biryani recipe turned out flawless! Using their Desi Spice Mix made it smell like a royal kitchen."</p>
-          <div class="reviewer-info">
-            <div class="avatar">SA</div>
-            <div>
-              <h4 class="reviewer-name">Saima Amjad</h4>
-              <span class="reviewer-location">Karachi</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card review-card">
-          <div class="stars">★★★★★</div>
-          <p class="review-text">"Bought the Basmati Rice and Clay Handi. Great quality! The 5% discount automatically kicked in on my order."</p>
-          <div class="reviewer-info">
-            <div class="avatar">TH</div>
-            <div>
-              <h4 class="reviewer-name">Tariq Hassan</h4>
-              <span class="reviewer-location">Lahore</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card review-card">
-          <div class="stars">★★★★★</div>
-          <p class="review-text">"DESI HUB captures the real essence of provincial Pakistani dishes. High quality standards!"</p>
-          <div class="reviewer-info">
-            <div class="avatar">FK</div>
-            <div>
-              <h4 class="reviewer-name">Fatima Khan</h4>
-              <span class="reviewer-location">Islamabad</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- About Us Section -->
   <section id="about" class="section-padding about-section">
     <div class="container about-grid">
@@ -436,7 +373,7 @@
     </div>
   </section>
 
-  <!-- Task 3: Contact Section with Smart Form Validation -->
+  <!-- Task 3: Smart Contact Section -->
   <section id="contact" class="section-padding">
     <div class="container">
       <div class="contact-wrapper">
@@ -471,7 +408,7 @@
         </div>
 
         <div class="card contact-form-card">
-          <!-- Form-level Status Banner -->
+          <!-- Form Status Banner -->
           <div id="form-status-banner" class="status-banner" aria-live="polite"></div>
 
           <form id="contact-form" novalidate>
@@ -564,7 +501,7 @@
       <p id="discount-message"><i class="fa-solid fa-gift text-gold"></i> Add Rs. 1,000 to get 5% OFF!</p>
     </div>
 
-    <!-- Items dynamically managed via JS delegation -->
+    <!-- Cart Items Container -->
     <div class="cart-items" id="cart-items-container"></div>
 
     <div class="cart-footer">
@@ -593,6 +530,132 @@
       <div class="modal-content" id="recipe-modal-content"></div>
     </div>
   </div>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DESI HUB — Royal Pantry Collection</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- JavaScript (Deferred) -->
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">DESI <span class="gold-text">HUB</span></h1>
+      <p class="page-subtitle">Royal Pantry & Organic Spice Collection</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="list" class="cards-grid"></div>
+  </main>
+
+  <footer class="page-footer">
+    <div class="container">
+      <p>&copy; 2026 DESI HUB Collection. Rendered dynamically via JavaScript map & join.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DESI HUB — Pantry Explorer</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- JavaScript (Deferred) -->
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="container">
+      <h1 class="page-title">DESI <span class="gold-text">HUB</span></h1>
+      <p class="page-subtitle">Royal Pantry Explorer</p>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- Explorer Control Panel -->
+    <section class="explorer-controls">
+      <!-- Requirement: Search box that filters as you type -->
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="search-input" placeholder="Search spices, grains, cookware..." aria-label="Search Pantry Items">
+      </div>
+
+      <!-- Requirement: Category buttons + Optional sort button -->
+      <div class="filter-bar">
+        <div class="category-buttons" id="category-buttons">
+          <button class="filter-btn active" data-category="All">All Items</button>
+          <button class="filter-btn" data-category="Whole Spices">Whole Spices</button>
+          <button class="filter-btn" data-category="Ground Spices">Ground Spices</button>
+          <button class="filter-btn" data-category="Grains">Grains</button>
+          <button class="filter-btn" data-category="Cookware">Cookware</button>
+          <button class="filter-btn" data-category="Pantry Essentials">Pantry Essentials</button>
+          <button class="filter-btn" data-category="Luxury Spices">Luxury Spices</button>
+        </div>
+
+        <button id="sort-price-btn" class="sort-btn">
+          <i class="fa-solid fa-arrow-down-short-wide"></i> Sort by Price: Low to High
+        </button>
+      </div>
+
+      <!-- Requirement: Count indicator (Showing X of Y) -->
+      <div class="count-display" id="count-display">
+        Showing 0 of 0 items
+      </div>
+    </section>
+
+    <!-- Cards Container -->
+    <div id="list" class="cards-grid"></div>
+
+    <!-- Requirement: Friendly empty state when nothing matches -->
+    <div id="empty-state" class="empty-state hidden">
+      <i class="fa-solid fa-utensils empty-icon"></i>
+      <h3>No Pantry Items Found</h3>
+      <p>We couldn't find anything matching your search query or selected category.</p>
+      <button id="reset-filters-btn" class="reset-btn">Reset All Filters</button>
+    </div>
+
+  </main>
+
+  <footer class="page-footer">
+    <div class="container">
+      <p>&copy; 2026 DESI HUB Collection Explorer. Reactive filtering powered by update() and state variables.</p>
+    </div>
+  </footer>
 
 </body>
 </html>
